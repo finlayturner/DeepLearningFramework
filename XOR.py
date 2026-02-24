@@ -6,14 +6,16 @@ start_time = time.time()
 
 n_samples = 1000
 input_dim = 5
-lr = 0.001
-layer = Linear(input_dim, 1, lr=lr)
+lr = 0.01
 
+xor = Linear(5, 4, lr=lr)
+xor2 = Linear(4, 1, lr=lr)
 model = NN(input_dim)
-model.add_layer(layer)
+model.add_layer(xor)
+model.add_layer(xor2)
 
 X_train = np.random.randint(0, 2, size=(n_samples, input_dim)).astype(float)
-y_train = ((X_train[:, 0] == 1) & (X_train[:, 4] == 1)).astype(float)
+y_train = ((X_train[:, 0] == 1) ^ (X_train[:, 4] == 1)).astype(float)
 loss = 0
 for epoch in range(50000):
     # Pick a random sample
