@@ -2,17 +2,36 @@ import numpy as np
 
 class Linear:
     def __init__(self, input_size: int, output_size: int, lr=0.1):
-        self.shape = (input_size, output_size)
-        self.W = np.random.randn(input_size, output_size) * np.sqrt(2 / input_size)
-        self.B = np.zeros(output_size)
+        self.shape = (output_size, input_size)
+        self.W = np.random.randn(output_size, input_size) * np.sqrt(2 / input_size)
+        self.B = np.zeros(output_size).reshape(-1, 1)
+
+        self.grad = 0
 
         # Learning Rate
         self.lr = lr
 
     def forward(self, X):
-        self.X = X
-        self.Z = X @ self.W + self.B
-        return np.maximum(0, self.Z)
+        self.X = X.reshape(-1, 1)
+        self.Z = self.W @ self.X + self.B
+        return np.maximum(0, self.Z) #RELU
+    
+    def backward(self, incoming_grad):
+        # (dl/dy * dy/dz)
+        d_relu = (self.Z > 0).astype(float)
+        d_relu = incoming_grad * d_relu
+
+        # Bias delta
+        self.grad_B = d_relu
+        # (dl/dW)
+        self.grad_W = d_relu @ self.X.T
+
+        return self.W.T @ d_relu
+    
+    def grad_descent(self):
+        # ???
+        self.W -= self.lr * self.grad_W
+        self.B -= self.lr * self.grad_B
 
 class NN:
     def __init__(self, input_size: int):
@@ -33,6 +52,15 @@ class NN:
         for layer in self.layers:
             X = layer.forward(X)
         return X
+    
+    def backward(self, x):
+        for i in range(len(self.layers) - 1, -1, -1):
+            layer = self.layers[i]
+            x = layer.backward(x)
+    
+    def grad_descent(self):
+        for layer in self.layers:
+            layer.grad_descent()
     
     def __str__(self):
         count = 1
