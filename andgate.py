@@ -6,8 +6,8 @@ start_time = time.time()
 
 n_samples = 1000
 input_dim = 5
-lr = 0.001
-layer = Linear(input_dim, 1, lr=lr)
+lr = 0.1
+layer = Linear(input_dim, 1, lr=lr, activation='sigmoid')
 
 model = NN(input_dim)
 model.add_layer(layer)
@@ -15,7 +15,7 @@ model.add_layer(layer)
 X_train = np.random.randint(0, 2, size=(n_samples, input_dim)).astype(float)
 y_train = ((X_train[:, 0] == 1) & (X_train[:, 4] == 1)).astype(float)
 loss = 0
-for epoch in range(50000):
+for epoch in range(5000):
     # Pick a random sample
     i = np.random.randint(0, n_samples)
     x = X_train[i].reshape(1, input_dim)

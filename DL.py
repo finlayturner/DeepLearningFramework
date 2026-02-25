@@ -1,12 +1,20 @@
 import numpy as np
+from activations import Activations
 
 class Linear:
-    def __init__(self, input_size: int, output_size: int, lr=0.1):
+    def __init__(self, input_size: int, output_size: int, lr=0.1, activation='relu'):
         self.shape = (output_size, input_size)
         self.W = np.random.randn(output_size, input_size) * np.sqrt(2 / input_size)
         self.B = np.zeros(output_size).reshape(-1, 1)
-
         self.grad = 0
+
+        activation_map = {
+            'relu': (Activations.relu, Activations.relu_d),
+            'sigmoid': (Activations.sigmoid, Activations.sigmoid_d),
+            'none': (lambda x: x, lambda x: np.ones_like(x))
+        }
+
+        self.activate, self.activate_d = activation_map[activation.lower()]
 
         # Learning Rate
         self.lr = lr

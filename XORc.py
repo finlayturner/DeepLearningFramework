@@ -8,9 +8,12 @@ n_samples = 1000
 input_dim = 5
 lr = 0.1
 
-xor = Linear(5, 4, lr=lr, activation='sigmoid')
-xor2 = Linear(4, 1, lr=lr, activation='sigmoid')
+xor = Linear(5, 4, lr=lr)
+xor2 = Linear(4, 1, lr=lr)
 model = NN(input_dim)
+
+for i in range(10):
+    model.add_layer(Linear(5, 5, lr=lr))
 model.add_layer(xor)
 model.add_layer(xor2)
 
