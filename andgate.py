@@ -15,7 +15,7 @@ model.add_layer(layer)
 X_train = np.random.randint(0, 2, size=(n_samples, input_dim)).astype(float)
 y_train = ((X_train[:, 0] == 1) & (X_train[:, 4] == 1)).astype(float)
 loss = 0
-for epoch in range(5000):
+for epoch in range(50000):
     # Pick a random sample
     i = np.random.randint(0, n_samples)
     x = X_train[i].reshape(1, input_dim)
